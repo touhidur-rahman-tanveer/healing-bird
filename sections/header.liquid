@@ -1,9 +1,11 @@
+{% assign selected_menu = linklists[section.settings['menu-selector']].links %}
+
 <div x-data="{openMenu : false}">
   {% comment %} ------------ Computer Device ------- {% endcomment %}
   <div x-data="{openItem : null}" class="flex justify-between items-start max-w-[90%] mx-auto mt-8">
-    <div class="text-2xl font-bold ">{{ shop.name }}</div>
+    <div class="text-2xl font-bold ">{{ section.settings['company-name'] }}</div>
     <div class="hidden gap-12 md:flex">
-      {% for link in linklists['main-menu'].links %}
+      {% for link in selected_menu %}
         {% if link.links != blank %}
           <div>
             <button
@@ -44,7 +46,7 @@
   {% comment %} ------------ Mobile Device ------- {% endcomment %}
   <div x-show="openMenu" class="max-w-[90%] mx-auto border-2 border-solid border-yellow-400 rounded-2xl mt-4 p-2">
     <div x-data="{openItem : null}" class="flex flex-col gap-2 md:hidden">
-      {% for link in linklists['main-menu'].links %}
+      {% for link in selected_menu %}
         {% if link.links != blank %}
           <div>
             <button
@@ -71,3 +73,23 @@
     </div>
   </div>
 </div>
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "text",
+      "id": "company-name",
+      "label": "Comapny Name",
+      "default": "Healing Bird"
+    },
+    {
+      "type": "link_list",
+      "id": "menu-selector",
+      "label": "Menu Changer",
+      "default": "main-menu",
+      "info": "You can cahnge the menu from here."
+    }
+  ]
+}
+{% endschema %}
