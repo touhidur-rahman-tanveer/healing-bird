@@ -8,13 +8,9 @@
  * ------------------------------------------------------------
  */
 {
-  "sections": {
-    "Template": {
-      "type": "template-404",
-      "settings": {}
-    }
+  "parent": "404.json",
+  "context": {
+    "market": "bd"
   },
-  "order": [
-    "Template"
-  ]
+  "sections": {}
 }
