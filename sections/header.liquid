@@ -1,1 +1,73 @@
-<h3 class="text-4xl font-bold text-red-600">Hello From Liquid.</h3>
+<div x-data="{openMenu : false}">
+  {% comment %} ------------ Computer Device ------- {% endcomment %}
+  <div x-data="{openItem : null}" class="flex justify-between items-start max-w-[90%] mx-auto mt-8">
+    <div class="text-2xl font-bold ">{{ shop.name }}</div>
+    <div class="hidden gap-12 md:flex">
+      {% for link in linklists['main-menu'].links %}
+        {% if link.links != blank %}
+          <div>
+            <button
+              x-on:click="openItem = openItem === {{forloop.index}} ? null : {{forloop.index}}"
+              class="flex items-center gap-2"
+            >
+              {{ link.title }}
+              <span x-show="openItem !== {{forloop.index}}">{% render 'chevronDown' %}</span>
+              <span x-show="openItem === {{forloop.index}}">{% render 'chevronUp' %}</span>
+            </button>
+            <ul x-show="openItem === {{forloop.index}}" @click.away="openItem = null">
+              {% for childLink in link.links %}
+                <li class="bg-yellow-400 mt-2 px-4 py-1 rounded-lg">{{ childLink.title }}</li>
+              {% endfor %}
+              <li></li>
+            </ul>
+          </div>
+        {% else %}
+          <div>
+            <button>{{ link.title }}</button>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="md:flex gap-4 hidden">
+      <button>{% render 'cart' %}</button>
+      {% if shop.customer_accounts_enabled %}
+        <button>Login</button>
+        <button>Register</button>
+      {% endif %}
+    </div>
+    <div x-on:click="openMenu = !openMenu" class=" md:hidden">
+      <span x-show="!openMenu">{% render 'hamburger' %}</span>
+      <span x-show="openMenu">{% render 'closeIcon' %}</span>
+    </div>
+  </div>
+
+  {% comment %} ------------ Mobile Device ------- {% endcomment %}
+  <div x-show="openMenu" class="max-w-[90%] mx-auto border-2 border-solid border-yellow-400 rounded-2xl mt-4 p-2">
+    <div x-data="{openItem : null}" class="flex flex-col gap-2 md:hidden">
+      {% for link in linklists['main-menu'].links %}
+        {% if link.links != blank %}
+          <div>
+            <button
+              x-on:click="openItem = openItem === {{forloop.index}} ? null : {{forloop.index}}"
+              class="flex items-center gap-2"
+            >
+              {{ link.title }}
+              <span x-show="openItem !== {{forloop.index}}">{% render 'chevronDown' %}</span>
+              <span x-show="openItem === {{forloop.index}}">{% render 'chevronUp' %}</span>
+            </button>
+            <ul class="max-w-[50%]" x-show="openItem === {{forloop.index}}" @click.away="openItem = null">
+              {% for childLink in link.links %}
+                <li class="bg-yellow-400 mt-2 px-4 py-1 rounded-lg ">{{ childLink.title }}</li>
+              {% endfor %}
+              <li></li>
+            </ul>
+          </div>
+        {% else %}
+          <div>
+            <button>{{ link.title }}</button>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
