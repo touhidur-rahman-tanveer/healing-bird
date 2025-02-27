@@ -6,9 +6,16 @@
       "settings": {
       
       }
+    },
+    "header": {
+      "type": "announcement-bar",
+      "settings": {
+      
+      }
     }
   },
   "order": [
+    "header",
     "Blog-post"
   ]
 }
