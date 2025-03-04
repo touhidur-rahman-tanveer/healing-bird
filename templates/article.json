@@ -1,21 +1,40 @@
 {
   "name": "Template Article",
+
   "sections": {
-    "Blog-post": {
+    "main": {
       "type": "template-article",
+      "blocks": {
+        "title":{
+          "type": "article_title"
+        },
+        "date":{
+          "type": "article_date"
+        },
+        "author":{
+          "type": "article_author"
+        },
+        "image":{
+          "type": "article_image"
+        },
+        "content":{
+          "type": "article_content"
+        },
+
+      },
+      "block_order": [
+        "title",
+        "date",
+        "author",
+        "image",
+        "content"
+      ],
       "settings": {
-      
-      }
-    },
-    "header": {
-      "type": "announcement-bar",
-      "settings": {
-      
+
       }
     }
   },
   "order": [
-    "header",
-    "Blog-post"
+    "main"
   ]
 }

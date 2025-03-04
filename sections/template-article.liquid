@@ -1,1 +1,133 @@
-<h3>{{ article.title }}</h3>
+<article>
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'article_title' %}
+        <h3 class="text-4xl font-bold text-center">{{ article.title }}</h3>
+      {% when 'article_date' %}
+        {% if section.settings['eanble-date'] %}
+          <time class="text-center" datetime="{{article.published_at |  date: format : "on_date"}}">
+            {{- article.published_at | date: format: 'on_date' -}}
+          </time>
+        {% endif %}
+      {% when 'article_author' %}
+        {% if section.settings['enable-author'] %}
+          <h3 class="text-center">{{ article.author }}</h3>
+        {% endif %}
+      {% when 'article_image' %}
+        {% if article.image != blank %}
+          <img
+            class="w-full h-80 md:h-96 object-cover object-center"
+            src="{{article.image |  image_url }}"
+            width="full"
+            height="full"
+            alt="{{article.image.alt}}"
+          >
+        {% else %}
+          {% assign placeholder = 'lifestyle-2' %}
+          {{ placeholder | placeholder_svg_tag: 'w-full h-80 md:h-96 object-cover object-center' }}
+        {% endif %}
+      {% when 'article_content' %}
+        <h3>{{ article.content }}</h3>
+
+      {% else %}
+
+    {% endcase %}
+  {% endfor %}
+</article>
+
+{% if blog.comments_enabled? %}
+  <div>
+    {% if article.comments_count > 0 %}
+    {% else %}
+      <hr class="mt-4">
+      <h3 class="text-xl font-bold text-red-500 my-4 ">There is no comments in this article right now!</h3>
+    {% endif %}
+  </div>
+
+  <div>
+    {% form 'new_comment', article %}
+      <div>
+        <div>
+          <label for="comment_author">Your Name</label>
+          <input
+            class="border px-2 py-4 mt-4 "
+            type="text"
+            name="comment[author]"
+            placeholder="John Doe"
+            required
+          >
+        </div>
+        <div>
+          <label for="comment_email">Your Email</label>
+          <input
+            class="border px-2 py-4 mt-4 "
+            type="email"
+            name="comment[email]"
+            placeholder="JohnDoe@email.com"
+            required
+          >
+        </div>
+        <div>
+          <label for="comment_body">Your Comment</label>
+          <input
+            class="border px-2 py-4 mt-4 "
+            type="text"
+            name="comment[body]"
+            placeholder="John Doe"
+            required
+          >
+        </div>
+        <div>
+          <button class="bg-yellow-500 px-2 py-4 rounded-xl cursor-pointer">Submit</button>
+        </div>
+      </div>
+    {% endform %}
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Template-article",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "eanble-date",
+      "label": "Display Title",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable-author",
+      "label": "Display Author",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "article_title",
+      "name": "Title",
+      "limit": 1
+    },
+    {
+      "type": "article_date",
+      "name": "Date",
+      "limit": 1
+    },
+    {
+      "type": "article_author",
+      "name": "Author",
+      "limit": 1
+    },
+    {
+      "type": "article_image",
+      "name": "Thumbnail",
+      "limit": 1
+    },
+    {
+      "type": "article_content",
+      "name": "Content",
+      "limit": 1
+    }
+  ]
+}
+{% endschema %}
